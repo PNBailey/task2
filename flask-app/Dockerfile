@@ -8,5 +8,7 @@ COPY . .
 RUN pip install -r requirements.txt
 # Expose correct port
 EXPOSE 5000
+
+ENV YOUR_NAME="Paul"
 # Create an entrypoint
 ENTRYPOINT ["python", "app.py"]
