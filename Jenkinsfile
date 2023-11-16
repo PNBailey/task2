@@ -34,7 +34,7 @@ pipeline {
                 docker pull 52pbailey/task2-nginx
                 docker pull 52pbailey/task2-db
 
-                docker network rm task1-net && echo "removed network" || echo "network already removed"
+                docker network rm task2-net && echo "removed network" || echo "network already removed"
                 docker network create task2-net
 
                 docker stop flask-app && echo "Stopped flask-app" || echo "flask-app is not running"
