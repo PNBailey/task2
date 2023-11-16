@@ -7,7 +7,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                docker build -t 52pbailey/task2 .
+                docker build -t 52pbailey/task2-flask-app flask-app
                 docker build -t 52pbailey/task2-nginx nginx
                 docker build -t 52pbailey/task2-db db
                 '''
@@ -17,7 +17,7 @@ pipeline {
         stage('Push') {
             steps {
                 sh '''
-                docker push 52pbailey/task2
+                docker push 52pbailey/task2-flask-app
                 docker push 52pbailey/task2-nginx
                 docker push 52pbailey/task2-db
                 '''
@@ -30,7 +30,7 @@ pipeline {
                 ssh jenkins@paulb-deploy <<EOF
                 export YOUR_NAME=${YOUR_NAME}
 
-                docker pull 52pbailey/task2
+                docker pull 52pbailey/task2-flask-app
                 docker pull 52pbailey/task2-nginx
                 docker pull 52pbailey/task2-db
 
@@ -42,9 +42,9 @@ pipeline {
 
                 docker stop nginx && echo "Stopped nginx" || echo "nginx is not running"
                 docker rm nginx && echo "removed nginx" || echo "nginx does not exist"
-                docker run -d --name mysql --network task2-net -e MYSQL_ROOT_PASSWORD=Password123
-                docker run -d --name flask-app --network task2-net -e YOUR_NAME=${YOUR_NAME} -e MYSQL_ROOT_PASSWORD=Password123 52pbailey/task1
-                docker run -d -p 80:80 --name nginx --network task2-net 52pbailey/task1-nginx
+                docker run -d --name mysql --network task2-net -e MYSQL_ROOT_PASSWORD=Password123 5pbailey/task2-db
+                docker run -d --name flask-app --network task2-net -e YOUR_NAME=${YOUR_NAME} -e MYSQL_ROOT_PASSWORD=Password123 52pbailey/task2-flask-app
+                docker run -d -p 80:80 --name nginx --network task2-net 52pbailey/task2-nginx
                 '''
             }
 
