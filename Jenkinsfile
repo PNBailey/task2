@@ -28,7 +28,6 @@ pipeline {
             steps {
                 sh '''
                 ssh jenkins@paulb-deploy <<EOF
-                
                 export YOUR_NAME=${YOUR_NAME}
 
                 docker pull 52pbailey/task2-flask-app
