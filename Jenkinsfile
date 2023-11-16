@@ -29,6 +29,7 @@ pipeline {
                 sh '''
                 ssh jenkins@paulb-deploy <<EOF
                 export YOUR_NAME=${YOUR_NAME}
+                export MYSQL_ROOT_PASSWORD=${YOUR_NAME}
 
                 docker pull 52pbailey/task2-flask-app
                 docker pull 52pbailey/task2-nginx
@@ -42,7 +43,7 @@ pipeline {
 
                 docker stop mysql && echo "Stopped mysql" || echo "mysql is not running"
                 docker rm mysql && echo "removed mysql" || echo "mysql does not exist"
-                
+
                 docker network rm task2-net && echo "removed network" || echo "network already removed"
                 docker network create task2-net
 
