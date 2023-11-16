@@ -34,9 +34,6 @@ pipeline {
                 docker pull 52pbailey/task2-nginx
                 docker pull 52pbailey/task2-db
 
-                docker network rm task2-net && echo "removed network" || echo "network already removed"
-                docker network create task2-net
-
                 docker stop flask-app && echo "Stopped flask-app" || echo "flask-app is not running"
                 docker rm flask-app && echo "removed flask-app" || echo "flask-app does not exist"
 
@@ -45,6 +42,9 @@ pipeline {
 
                 docker stop mysql && echo "Stopped mysql" || echo "mysql is not running"
                 docker rm mysql && echo "removed mysql" || echo "mysql does not exist"
+                
+                docker network rm task2-net && echo "removed network" || echo "network already removed"
+                docker network create task2-net
 
                 docker run -d --name mysql --network task2-net -e MYSQL_ROOT_PASSWORD=Password123 52pbailey/task2-db
                 docker run -d --name flask-app --network task2-net -e YOUR_NAME=${YOUR_NAME} -e MYSQL_ROOT_PASSWORD=Password123 52pbailey/task2-flask-app
