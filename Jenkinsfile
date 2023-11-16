@@ -1,9 +1,9 @@
 pipeline {
     agent any
+    environment {
+        YOUR_NAME = credentials("YOUR_NAME")
+    }
     stages {
-        environment {
-            YOUR_NAME = credentials("YOUR_NAME")
-        }
         stage('Build') {
             steps {
                 sh '''
