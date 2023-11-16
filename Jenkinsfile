@@ -29,7 +29,6 @@ pipeline {
                 sh '''
                 ssh jenkins@paulb-deploy <<EOF
                 export YOUR_NAME=${YOUR_NAME}
-                export MYSQL_ROOT_PASSWORD=${YOUR_NAME}
 
                 docker pull 52pbailey/task2-flask-app
                 docker pull 52pbailey/task2-nginx
