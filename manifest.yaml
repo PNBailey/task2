@@ -72,9 +72,9 @@ spec:
   - image: 52pbailey/nginx
     imagePullPolicy: IfNotPresent
     name: nginx
-      volumeMounts:
-        - name: nginx-vol
-          MountPath: /etc/nginx
+    volumeMounts:
+      - name: nginx-vol
+        MountPath: /etc/nginx
 ---
 apiVersion: v1
 kind: Service
