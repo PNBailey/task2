@@ -1,0 +1,92 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    appClusterIpService: appClusterIpService
+  name: flask-app
+  namespace: default
+spec:
+  containers:
+  - image: 52pbailey/task2-flask-app
+    imagePullPolicy: IfNotPresent
+    name: flask-app
+    env: 
+      - name: MYSQL_ROOT_PASSWORD
+        value: Password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    appClusterIpService: appClusterIpService
+  name: flask-app-service2
+spec:
+  ports: 
+  - port: 5000
+  selector:
+    appService: appService
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    mysqlclusterIpService: mysqlclusterIpService
+  name: mysql
+  namespace: default
+spec:
+  containers:
+  - image: 52pbailey/task2-db
+    imagePullPolicy: IfNotPresent
+    name: db
+    env: 
+      - name: MYSQL_ROOT_PASSWORD
+        value: Password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    mysqlclusterIpService: mysqlclusterIpService
+  name: mysql
+spec:
+  type: ClusterIP
+  selector:
+    mysqlclusterIpService: mysqlclusterIpService
+  ports:
+    - port: 3306
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    loadBalancer: loadBalancer
+  name: nginx
+  namespace: default
+spec:
+  volumes:
+    - name: nginx-vol
+      configMap: 
+        name: nginx.conf
+  containers:
+  - image: 52pbailey/nginx
+    imagePullPolicy: IfNotPresent
+    name: nginx
+      volumeMounts:
+        - name: nginx-vol
+          MountPath: /etc/nginx
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    loadBalancer: loadBalancer
+  name: nginx
+spec:
+  type: ClusterIP
+  selector:
+    loadBalancer: loadBalancer
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 5000
