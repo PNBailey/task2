@@ -12,7 +12,10 @@ spec:
     name: flask-app
     env: 
     - name: MYSQL_ROOT_PASSWORD
-      value: Password
+      valueFrom:
+        secretKeyRef:
+          name: mysql-root-password
+          key: mysql-root-password-value
 ---
 apiVersion: v1
 kind: Service
@@ -41,7 +44,10 @@ spec:
     name: db
     env: 
       - name: MYSQL_ROOT_PASSWORD
-        value: Password
+        valueFrom:
+        secretKeyRef:
+          name: mysql-root-password
+          key: mysql-root-password-value
 ---
 apiVersion: v1
 kind: Service

@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        YOUR_NAME = credentials("YOUR_NAME")
+        MYSQL_ROOT_PASSWORD = credentials("MYSQL_ROOT_PASSWORD")
     }
     stages {
         stage('Build') {
@@ -25,6 +25,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
+                kubectl create secret generic mysql-root-password --from-literal=mysql-root-password=${MYSQL_ROOT_PASSWORD}
                 kubectl apply -f .
                 kubectl get services
                 '''
