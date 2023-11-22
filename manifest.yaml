@@ -69,7 +69,7 @@ spec:
       configMap: 
         name: nginx-config
   containers:
-  - image: 52pbailey/nginx
+  - image: nginx:alpine
     imagePullPolicy: IfNotPresent
     name: nginx
     volumeMounts:
