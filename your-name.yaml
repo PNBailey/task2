@@ -4,4 +4,4 @@ metadata:
   name: your-name
 type: Opaque
 stringData:
-  yourname: {{YOUR_NAME}}
+  yournamekey: {{YOUR_NAME}}
