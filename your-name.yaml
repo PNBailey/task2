@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: your-name
+  name: yourname
 type: Opaque
 stringData:
   yournamekey: {{YOUR_NAME}}
