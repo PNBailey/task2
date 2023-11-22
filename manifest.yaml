@@ -14,7 +14,7 @@ spec:
     - name: MYSQL_ROOT_PASSWORD
       valueFrom:
         secretKeyRef:
-          name: mysqlrootpassword
+          name: mysqlpassword
           key: mysqlrootpassword
 ---
 apiVersion: v1
@@ -46,7 +46,7 @@ spec:
       - name: MYSQL_ROOT_PASSWORD
         valueFrom:
         secretKeyRef:
-          name: mysqlrootpassword
+          name: mysqlpassword
           key: mysqlrootpassword
 ---
 apiVersion: v1
