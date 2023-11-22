@@ -16,6 +16,11 @@ spec:
         secretKeyRef:
           name: mysqlpassword
           key: mysqlrootpassword
+    - name: YOUR_NAME
+      valueFrom:
+        secretKeyRef:
+          name: yourname
+          key: yourname
 ---
 apiVersion: v1
 kind: Service
