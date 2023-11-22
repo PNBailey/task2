@@ -25,7 +25,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
-                kubectl create secret generic mysql-root-password --from-literal=mysql-root-password=$MYSQL_ROOT_PASSWORD && echo "Secret created" | echo "Secret already exists"
+                sed 's,{{MYSQL_ROOT_PASSWORD}},$MYSQL_ROOT_PASSWORD,g' secrets-manifest.yaml | kubectl apply -f
                 kubectl apply -f .
                 kubectl get services
                 '''
