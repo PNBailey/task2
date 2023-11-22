@@ -20,7 +20,7 @@ spec:
       valueFrom:
         secretKeyRef:
           name: yourname
-          key: yourname
+          key: yournamekey
 ---
 apiVersion: v1
 kind: Service
