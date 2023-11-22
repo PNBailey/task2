@@ -43,8 +43,8 @@ spec:
     imagePullPolicy: Always
     name: db
     env: 
-      - name: MYSQL_ROOT_PASSWORD
-        valueFrom:
+    - name: MYSQL_ROOT_PASSWORD
+      valueFrom:
         secretKeyRef:
           name: mysqlpassword
           key: mysqlrootpassword
