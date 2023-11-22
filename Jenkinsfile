@@ -25,7 +25,6 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
-                sed 's,{{MYSQL_ROOT_PASSWORD}},$MYSQL_ROOT_PASSWORD,g' secrets-manifest.yaml | kubectl apply -f .
                 kubectl apply -f .
                 kubectl get services
                 '''
