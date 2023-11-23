@@ -89,7 +89,7 @@ kind: Deployment
 metadata:
   name: nginx
   labels: 
-    nginx: nginx
+    nginx: nginx # This must match the pod labels in the template below
 spec:
   replicas: 3
   selector:

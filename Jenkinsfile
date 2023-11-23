@@ -26,6 +26,11 @@ pipeline {
         stage('Stage Deploy') {
             steps {
                 sh '''
+                # Replace placeholders in the YAML file
+                sed -e 's,{{YOUR_NAME}},'"${YOUR_NAME}"',g' -e 's,{{version}},'"${BUILD_NUMBER}"',g' your-name.yaml > modified-your-name.yaml
+
+                # Display the modified content (optional, for debugging)
+                cat modified-your-name.yaml
                 sed -e 's, {{MYSQL_ROOT_PASSWORD}}, '${MYSQL_ROOT_PASSWORD}' ,g;' sql-password.yaml | kubectl apply -f - --namespace stage
                 sed -e 's, {{YOUR_NAME}}, '${YOUR_NAME}' ,g;' -e 's, {{version}}, '${BUILD_NUMBER}' ,g;' your-name.yaml | kubectl apply -f - --namespace stage
                 kubectl apply -f config-map-manifest.yaml --namespace stage
