@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app-replicas
+  name: mysql-replicas
   labels:
-    task: task2
+    mysqldb: mysql
 spec:
   strategy:
     rollingUpdate:
@@ -12,15 +12,15 @@ spec:
   replicas: 3
   selector: 
     matchLabels: 
-      app: flask-app
+      mysqldb: mysql
   template: 
     metadata:
       labels:
-        app: flask-app
+        mysqldb: mysql
     spec:
       containers:
-      - image: 52pbailey/task2-flask-app:v{{version}}
-        name: flask-app
+      - image: 52pbailey/task2-db:v{{version}}
+        name: mysql
         env: 
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
@@ -32,11 +32,11 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: flask-app
-  name: flask-app
+    mysqldb: mysql
+  name: mysql
 spec:
-  ports: 
-  - port: 5000
-  selector:
-    app: flask-app
   type: ClusterIP
+  selector:
+    mysqldb: mysql
+  ports:
+    - port: 3306

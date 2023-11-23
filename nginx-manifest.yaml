@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  labels: 
+    nginx: nginx # This must match the pod labels in the template below
+spec:
+  replicas: 3
+  selector:
+    matchLabels: 
+      nginx: nginx
+  strategy:
+    rollingUpdate:
+      maxSurge: 33%
+      maxUnavailable: 33%
+  template:
+    metadata:
+      labels:
+        nginx: nginx
+    spec:
+      volumes:
+        - name: nginx-vol
+          configMap: 
+            name: nginx-config
+      containers:
+      - image: nginx:alpine
+        imagePullPolicy: IfNotPresent
+        name: nginx
+        volumeMounts:
+          - name: nginx-vol
+            mountPath: /etc/nginx
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    nginx: nginx
+  name: nginx
+spec:
+  type: LoadBalancer
+  selector:
+    nginx: nginx
+  ports:
+    - port: 80
+      protocol: TCP
