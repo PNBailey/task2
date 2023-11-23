@@ -75,12 +75,12 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    mysqlclusterIpService: mysqlclusterIpService
+    mysqldb: mysql
   name: mysql
 spec:
   type: ClusterIP
   selector:
-    mysqlclusterIpService: mysqlclusterIpService
+    mysqldb: mysql
   ports:
     - port: 3306
 ---
