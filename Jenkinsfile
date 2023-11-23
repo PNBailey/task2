@@ -28,7 +28,7 @@ pipeline {
                 sh '''
                 sed -e 's, {{MYSQL_ROOT_PASSWORD}}, '${MYSQL_ROOT_PASSWORD}' ,g;' sql-password.yaml | kubectl apply -f - --namespace stage
                 sed -e 's, {{YOUR_NAME}}, '${YOUR_NAME}' ,g;' -e 's, {{version}}, '${BUILD_NUMBER}' ,g;' your-name.yaml | kubectl apply -f - --namespace stage
-                kubectl apply -f config-map-manifest.yaml --namespace prod
+                kubectl apply -f config-map-manifest.yaml --namespace stage
                 kubectl apply -f manifest.yaml --namespace stage
                 sleep 60
                 kubectl get services
