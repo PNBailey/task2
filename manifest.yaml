@@ -1,10 +1,14 @@
 apiVersion: apps/v1
-kind: ReplicaSet
+kind: Deployment
 metadata:
   name: app-replicas
   labels:
     task: task2
 spec:
+  strategy:
+    rollingUpdate:
+      maxSurge: 33%
+      maxUnavailable: 33%
   replicas: 3
   selector: 
     matchLabels: 
@@ -13,16 +17,19 @@ spec:
     metadata:
       labels:
         app: flask-app
-  spec:
-    containers:
-    - image: 52pbailey/task2-flask-app:v{{version}}
-      name: flask-app
-      env: 
-      - name: MYSQL_ROOT_PASSWORD
-        valueFrom:
-          secretKeyRef:
-            name: mysqlpassword
-            key: mysqlrootpassword
+    spec:
+      metadata:
+        labels:
+          appClusterIpService: appClusterIpService
+      containers:
+      - image: 52pbailey/task2-flask-app:v{{version}}
+        name: flask-app
+        env: 
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysqlpassword
+              key: mysqlrootpassword
 ---
 apiVersion: v1
 kind: Service
@@ -37,24 +44,38 @@ spec:
     appClusterIpService: appClusterIpService
   type: ClusterIP
 ---
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
+  name: app-replicas
   labels:
-    mysqlclusterIpService: mysqlclusterIpService
-  name: mysql
-  namespace: default
+    task: task2
 spec:
-  containers:
-  - image: 52pbailey/task2-db:v{{version}}
-    imagePullPolicy: Always
-    name: db
-    env: 
-    - name: MYSQL_ROOT_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: mysqlpassword
-          key: mysqlrootpassword
+  strategy:
+    rollingUpdate:
+      maxSurge: 33%
+      maxUnavailable: 33%
+  replicas: 3
+  selector: 
+    matchLabels: 
+      mysql: mysql
+  template: 
+    metadata:
+      labels:
+        mysql: mysql
+    spec:
+      metadata:
+        labels:
+          mysqlclusterIpService: mysqlclusterIpService
+      containers:
+      - image: 52pbailey/task2-flask-app:v{{version}}
+        name: flask-app
+        env: 
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysqlpassword
+              key: mysqlrootpassword
 ---
 apiVersion: v1
 kind: Service
