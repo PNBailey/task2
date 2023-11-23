@@ -63,7 +63,7 @@ spec:
     spec:
       containers:
       - image: 52pbailey/task2-db:v{{version}}
-        name: flask-app
+        name: mysql
         env: 
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
