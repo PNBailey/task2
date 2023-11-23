@@ -90,7 +90,6 @@ metadata:
   labels:
     loadBalancer: loadBalancer
   name: nginx
-  namespace: default
 spec:
   volumes:
     - name: nginx-vol
