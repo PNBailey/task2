@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: app-replicas
+  labels:
+    task: task2
+spec:
+  replicas: 3
+  selector: 
+    matchLabels: 
+      app: flask-app
+  template: 
+    metadata:
+      labels:
+        app: flask-app
+  spec:
+    containers:
+    - image: 52pbailey/task2-flask-app
+      name: flask-app
+      env: 
+      - name: MYSQL_ROOT_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: mysqlpassword
+            key: mysqlrootpassword
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    appClusterIpService: appClusterIpService
+  name: flask-app
+spec:
+  ports: 
+  - port: 5000
+  selector:
+    appClusterIpService: appClusterIpService
+  type: ClusterIP

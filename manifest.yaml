@@ -1,26 +1,28 @@
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: ReplicaSet
 metadata:
+  name: app-replicas
   labels:
-    appClusterIpService: appClusterIpService
-  name: flask-app
-  namespace: default
+    task: task2
 spec:
-  containers:
-  - image: 52pbailey/task2-flask-app
-    imagePullPolicy: IfNotPresent
-    name: flask-app
-    env: 
-    - name: MYSQL_ROOT_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: mysqlpassword
-          key: mysqlrootpassword
-    - name: YOUR_NAME
-      valueFrom:
-        secretKeyRef:
-          name: yourname
-          key: yournamekey
+  replicas: 3
+  selector: 
+    matchLabels: 
+      app: flask-app
+  template: 
+    metadata:
+      labels:
+        app: flask-app
+  spec:
+    containers:
+    - image: 52pbailey/task2-flask-app:v{{version}}
+      name: flask-app
+      env: 
+      - name: MYSQL_ROOT_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: mysqlpassword
+            key: mysqlrootpassword
 ---
 apiVersion: v1
 kind: Service
@@ -44,7 +46,7 @@ metadata:
   namespace: default
 spec:
   containers:
-  - image: 52pbailey/task2-db
+  - image: 52pbailey/task2-db:v{{version}}
     imagePullPolicy: Always
     name: db
     env: 
