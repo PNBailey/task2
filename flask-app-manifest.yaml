@@ -27,6 +27,7 @@ spec:
             secretKeyRef:
               name: mysqlpassword
               key: mysqlrootpassword
+        env: 
         - name: YOUR_NAME
           value: {{YOUR_NAME}}
 ---
