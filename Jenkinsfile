@@ -42,6 +42,7 @@ pipeline {
                 sh '''
                 sleep 50
                 export STAGING_IP=\$(kubectl get svc -o json --namespace stage | jq '.items[] | select(.metadata.name == "nginx") | .status.loadBalancer.ingress[0].ip' | tr -d '"')
+                echo STAGING_IP
                 pip3 install requests
                 python3 flask-app/test-app.py
                 '''
