@@ -26,7 +26,7 @@ pipeline {
         stage('Stage Deploy') {
             steps {
                 sh '''
-                sed -e 's, {{MYSQL_ROOT_PASSWORD}}, '${MYSQL_ROOT_PASSWORD}' ,g;' sql-password.yaml | kubectl apply -f - --namespace prod
+                sed -e 's, {{MYSQL_ROOT_PASSWORD}}, '${MYSQL_ROOT_PASSWORD}' ,g;' sql-password.yaml | kubectl apply -f - --namespace stage
                 kubectl apply -f config-map-manifest.yaml --namespace stage
                 sed -e 's,{{version}},'${BUILD_NUMBER}',g;' my-sql-manifest.yaml | kubectl apply -f - --namespace stage
                 sed -e 's,{{version}},'${BUILD_NUMBER}',g;' -e 's,{{YOUR_NAME}},'${YOUR_NAME}',g;' flask-app-manifest.yaml | kubectl apply -f - --namespace stage
@@ -52,10 +52,10 @@ pipeline {
             steps {
                 sh '''
                 sed -e 's, {{MYSQL_ROOT_PASSWORD}}, '${MYSQL_ROOT_PASSWORD}' ,g;' sql-password.yaml | kubectl apply -f - --namespace prod
-                kubectl apply -f config-map-manifest.yaml --namespace stage
-                sed -e 's,{{version}},'${BUILD_NUMBER}',g;' my-sql-manifest.yaml | kubectl apply -f - --namespace stage
-                sed -e 's,{{version}},'${BUILD_NUMBER}',g;' -e 's,{{YOUR_NAME}},'${YOUR_NAME}',g;' flask-app-manifest.yaml | kubectl apply -f - --namespace stage
-                kubectl apply -f nginx-manifest.yaml --namespace stage
+                kubectl apply -f config-map-manifest.yaml --namespace prod
+                sed -e 's,{{version}},'${BUILD_NUMBER}',g;' my-sql-manifest.yaml | kubectl apply -f - --namespace prod
+                sed -e 's,{{version}},'${BUILD_NUMBER}',g;' -e 's,{{YOUR_NAME}},'${YOUR_NAME}',g;' flask-app-manifest.yaml | kubectl apply -f - --namespace prod
+                kubectl apply -f nginx-manifest.yaml --namespace prod
                 sleep 60
                 kubectl get services
                 '''
